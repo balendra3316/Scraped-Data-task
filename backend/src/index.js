@@ -3,17 +3,19 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import cron from 'node-cron';
+import * as dotenv from 'dotenv';
 import { scrapeEvents } from './services/scraper.js';
 import eventRoutes from './routes/events.js';
 import subscriberRoutes from './routes/subscribers.js';
 
-const app = express();
 
+const app = express();
+dotenv.config();
 app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb://0.0.0.0:27017/sydney-events')
+mongoose.connect(process.env.DATABASE_URL)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
