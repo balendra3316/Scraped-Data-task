@@ -13,7 +13,7 @@ export default function Home() {
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/events');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events`);
       const data = await response.json();
       setEvents(data);
     } catch (error) {

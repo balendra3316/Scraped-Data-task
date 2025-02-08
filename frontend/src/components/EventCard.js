@@ -12,7 +12,7 @@ export default function EventCard({ event }) {
 
   const handleEmailSubmit = async (email) => {
     try {
-      await fetch('http://localhost:5000/api/subscribers', {
+      await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/subscribers`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
