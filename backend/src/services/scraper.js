@@ -5,7 +5,16 @@ import Event from "../models/event.js";
 export async function scrapeEvents() {
   console.log("Starting Puppeteer Scraping...");
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: "new",
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+    ],
+  });
+
   const page = await browser.newPage();
 
   try {
@@ -17,10 +26,8 @@ export async function scrapeEvents() {
       }
     );
 
-    // Ensure event cards are loaded
     await page.waitForSelector(".event-card-details", { timeout: 60000 });
 
-    // Extract event details
     const events = await page.evaluate(() => {
       const eventCards = document.querySelectorAll(".event-card-details");
       return Array.from(eventCards).map((card) => {
@@ -56,7 +63,6 @@ export async function scrapeEvents() {
 
     for (const event of events) {
       console.log("Saving Event:", event);
-
       await mongoose.connection.collection("events").insertOne(event);
     }
 
